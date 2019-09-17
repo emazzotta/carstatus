@@ -1,0 +1,8 @@
+.idea
+venv
+data
+.env
+.env.dev
+*.iml
+nohup.out
+*.http
