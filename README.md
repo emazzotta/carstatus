@@ -37,7 +37,7 @@ make run
 
 ```text
 🚀 MyVehicleName stats
-🔋 SoC: 75% (231.86 km range)
+🔋 SoC: 75% (372.39 km range)
 🌡 Temp: 23.7˚ (22.5˚ outside)
 💻 Version: 2019.32.2.2 da05838
 📌 Location: Müllerstrasse 16, 8004 Zürich
