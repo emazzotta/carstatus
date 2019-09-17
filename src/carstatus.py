@@ -73,7 +73,7 @@ def load_vehicle_data():
 
         if vehicle_data_response.status_code == 408:
             post_wake_up(vehicle_id, headers)
-            time.sleep(5000)
+            time.sleep(5)
             vehicle_data_response = get_vehicle_data(vehicle_id, headers)
 
         if not vehicle_data_response.ok:
