@@ -6,6 +6,7 @@ import json
 import requests as requests
 import sys
 import time
+import urllib.parse
 from os.path import join
 
 MILES_TO_KILOMETER = 1.609
@@ -38,6 +39,7 @@ def print_stats(vehicle_data=None):
     print(f'🌡  Temp: {inside_temperature}˚ ({outside_temperature}˚ outside)')
     print(f'💻 Version: {car_version}')
     print(f'📌 Location: {location}')
+    print(f'🗺  Google Maps: https://www.google.ch/maps/search/{urllib.parse.quote(location)}')
     print(f'🛣  Odometer: {odometer} km')
     print('🔒 Car locked' if is_locked else '🚗 Car unlocked')
 
@@ -49,13 +51,16 @@ def lat_lon_to_address(latitude, longitude):
             f'?format=json'
             f'&lat={latitude}'
             f'&lon={longitude}'
-            f'&zoom=18'
-            f'&addressdetails=1'
         ).content
     )
-    address = result.get('address')
-    return f'{address.get("road")} {address.get("house_number").upper()}, ' \
-           f'{address.get("postcode")} {address.get("city")}'
+
+    address = result.get('address', {})
+
+    house_number = address.get("house_number", "").upper()
+    road = address.get("road", "")
+    street = f'{road} {house_number}' if house_number else road
+
+    return f'{street}, {address.get("postcode", "")} {address.get("city", "")}'
 
 
 def load_vehicle_data():
