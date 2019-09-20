@@ -20,7 +20,7 @@ def print_stats(vehicle_data=None):
 
     charge_state = vehicle_data.get("charge_state", {})
     current_battery_level = charge_state.get("battery_level")
-    current_battery_range = round(charge_state.get("battery_range") * MILES_TO_KILOMETER, 2)
+    current_battery_range = round(charge_state.get("battery_range", 0) * MILES_TO_KILOMETER, 2)
 
     climate_state = vehicle_data.get("climate_state", {})
     inside_temperature = climate_state.get("inside_temp", {})
@@ -29,7 +29,7 @@ def print_stats(vehicle_data=None):
     vehicle_state = vehicle_data.get("vehicle_state", {})
     car_version = vehicle_state.get("car_version")
     is_locked = vehicle_state.get("locked")
-    odometer = round(vehicle_state.get("odometer") * MILES_TO_KILOMETER, 2)
+    odometer = round(vehicle_state.get("odometer", 0) * MILES_TO_KILOMETER, 2)
 
     drive_state = vehicle_data.get("drive_state", {})
     location = lat_lon_to_address(drive_state.get("latitude"), drive_state.get("longitude"))
@@ -76,10 +76,10 @@ def load_vehicle_data():
 
         vehicle_data_response = get_vehicle_data(vehicle_id, headers)
 
-        if vehicle_data_response.status_code == 408:
+        if vehicle_data_response.status_code in (408, 504):
             post_wake_up(vehicle_id, headers)
-        while vehicle_data_response.status_code == 408:
-            time.sleep(2)
+        while vehicle_data_response.status_code in (408, 504):
+            time.sleep(1)
             vehicle_data_response = get_vehicle_data(vehicle_id, headers)
 
         if not vehicle_data_response.ok:
