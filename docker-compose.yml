@@ -3,5 +3,6 @@ version: '3'
 services:
   carstatus:
     build: .
+    image: emazzotta/carstatus
     env_file:
       - .env
