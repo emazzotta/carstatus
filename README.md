@@ -23,9 +23,11 @@ git clone git@github.com:emazzotta/carstatus.git && \
 * Adapt the `.env`-file with your token 
 
 |.env variable name|Use|Required|Default|
-|---|---|---|
+|---|---|---|---|
 |TESLA_TOKEN|The Tesla API Token|True|None|
 |VEHICLE_ID|Your car's id (see Tesla API)|True|None|
+|DATE_OF_OWNERSHIP|Since when you own the car|False|None|
+|ALLOWED_KILOMETERS_PER_YEAR|Max kilometers|False|None|
 
 ### Run
 
