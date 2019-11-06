@@ -7,6 +7,7 @@ import requests as requests
 import sys
 import time
 import urllib.parse
+from datetime import datetime, date
 from os.path import join
 
 MILES_TO_KILOMETER = 1.609
@@ -34,13 +35,28 @@ def print_stats(vehicle_data=None):
     drive_state = vehicle_data.get("drive_state", {})
     location = lat_lon_to_address(drive_state.get("latitude"), drive_state.get("longitude"))
 
+    allowed_pro_rata_kilometers_reached_percentage = None
+    allowed_pro_rata_kilometers = 0
+    if os.environ.get('DATE_OF_OWNERSHIP') and os.environ.get('ALLOWED_KILOMETERS_PER_YEAR'):
+        date_of_ownership = datetime.strptime(os.environ.get('DATE_OF_OWNERSHIP'), "%Y-%m-%d").date()
+        days_of_ownership = (date.today() - date_of_ownership).days
+        allowed_kilometers_per_year = float(os.environ.get('ALLOWED_KILOMETERS_PER_YEAR'))
+        allowed_pro_rata_kilometers = round(allowed_kilometers_per_year / 365 * days_of_ownership, 2)
+        allowed_pro_rata_kilometers_reached_percentage = round(100 / allowed_pro_rata_kilometers * odometer, 2)
+
+    additional_kilometer_info = (
+        f' ({allowed_pro_rata_kilometers_reached_percentage}% of max. {allowed_pro_rata_kilometers} km)'
+        if allowed_pro_rata_kilometers_reached_percentage
+        else ''
+    )
+
     print(f'🚀 {car_name} stats')
     print(f'🔋 SoC: {current_battery_level}% ({current_battery_range} km range)')
     print(f'🌡  Temp: {inside_temperature}˚ ({outside_temperature}˚ outside)')
     print(f'💻 Version: {car_version}')
     print(f'📌 Location: {location}')
     print(f'🗺  Google Maps: https://www.google.ch/maps/search/{urllib.parse.quote(location)}')
-    print(f'🛣  Odometer: {odometer} km')
+    print(f'🛣  Odometer: {odometer} km' + additional_kilometer_info)
     print('🔒 Car locked' if is_locked else '🚗 Car unlocked')
 
 

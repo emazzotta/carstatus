@@ -22,10 +22,10 @@ git clone git@github.com:emazzotta/carstatus.git && \
 * Get your tesla token, [see instructions](https://tesla-api.timdorr.com/api-basics/authentication)
 * Adapt the `.env`-file with your token 
 
-|.env variable name|Use|Default|
+|.env variable name|Use|Required|Default|
 |---|---|---|
-|TESLA_TOKEN|The Tesla API Token|None|
-|VEHICLE_ID|Your car's id (see Tesla API)|None|
+|TESLA_TOKEN|The Tesla API Token|True|None|
+|VEHICLE_ID|Your car's id (see Tesla API)|True|None|
 
 ### Run
 
