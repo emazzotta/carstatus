@@ -10,7 +10,7 @@ import urllib.parse
 from datetime import datetime, date
 from os.path import join
 
-MILES_TO_KILOMETER = 1.609
+MILES_TO_KILOMETER = 1.609344
 
 
 def print_stats(vehicle_data=None):
