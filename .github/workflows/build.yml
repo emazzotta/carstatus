@@ -1,0 +1,56 @@
+name: "Build"
+
+on:
+  push:
+    branches: master
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: "Test"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v10.3.3
+        with:
+          python-version: "3.15"
+
+      - name: Install dependencies
+        run: uv sync --locked
+
+      - name: Smoke check
+        run: uv run --locked python -c "import src.carstatus"
+
+  build:
+    name: "Build"
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+        with:
+          version: latest
+
+      - name: Build
+        uses: docker/build-push-action@v7
+        with:
+          platforms: linux/amd64,linux/arm64
+          push: false
+          cache-from: |
+            type=gha,scope=linux/amd64
+            type=gha,scope=linux/arm64
+          cache-to: |
+            type=gha,mode=max,scope=linux/amd64
+            type=gha,mode=max,scope=linux/arm64
