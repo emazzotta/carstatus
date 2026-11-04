@@ -1,4 +1,4 @@
-FROM python:3.9.5-alpine3.12
+FROM python:3.15.2-alpine3.24
 
 LABEL maintainer="hello@mazzotta.me"
 
