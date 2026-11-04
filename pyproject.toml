@@ -1,0 +1,8 @@
+[project]
+name = "carstatus"
+version = "0.1.0"
+description = "Get your Tesla's current status"
+requires-python = ">=3.15"
+dependencies = [
+    "requests==2.34.2",
+]

@@ -6,3 +6,4 @@ data
 *.iml
 nohup.out
 *.http
+.venv/
